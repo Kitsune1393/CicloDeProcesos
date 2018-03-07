@@ -80,8 +80,8 @@ public class Proceso {
         DecimalFormat df = new DecimalFormat("###");
         return nombre + " - "
                 + df.format(tiempo) + " s - "
-                + df.format(memoria) + " M.Gb - "
-                + df.format(discoDuro) + " DD.Gb - "
+                + df.format(memoria) + " Gb.M - "
+                + df.format(discoDuro) + " Gb.DD - "
                 + df.format(nucleos)+" N";
     }
 

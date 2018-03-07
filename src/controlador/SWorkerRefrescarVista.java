@@ -1,15 +1,12 @@
 package controlador;
 
-import static java.lang.Thread.sleep;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.SwingWorker;
 import model.Proceso;
 import vista.JFramePrincipal;
 
-public class SWorkerRefrescarVista extends SwingWorker<Void, String> {
+public class SWorkerRefrescarVista extends SwingWorker<Void, Void> {
 
     private final DefaultListModel modelInicio;
     private final DefaultListModel modelEnEjecucion;
@@ -17,10 +14,8 @@ public class SWorkerRefrescarVista extends SwingWorker<Void, String> {
     private final DefaultListModel modelListo;
     private final DefaultListModel modelTerminado;
     private final List<Proceso> procesos;
-    private final JFramePrincipal jFramePrincipal;
 
     public SWorkerRefrescarVista(JFramePrincipal jFramePrincipal) {
-        this.jFramePrincipal = jFramePrincipal;
         modelInicio = new DefaultListModel();
         jFramePrincipal.getjListInicio().setModel(modelInicio);
         modelEnEjecucion = new DefaultListModel();
@@ -34,41 +29,46 @@ public class SWorkerRefrescarVista extends SwingWorker<Void, String> {
         procesos = jFramePrincipal.getProcesos();
     }
 
-    private void limpiarListas() {
-        modelEnEjecucion.removeAllElements();
-        modelEnEspera.removeAllElements();
-        modelInicio.removeAllElements();
-        modelListo.removeAllElements();
-        modelTerminado.removeAllElements();
-    }
-
     @Override
     protected Void doInBackground() {
+        long time = System.currentTimeMillis();
         while (true) {
-            try {
-                limpiarListas();
+            if (System.currentTimeMillis() - time > 1000) {
+                time = System.currentTimeMillis();
                 for (Proceso proceso : procesos) {
                     switch (proceso.getEstado()) {
-                        case 1:
-                            modelInicio.addElement(proceso);
+                        case 1://Inicio
+                            if (!modelInicio.contains(proceso)) {
+                                modelInicio.addElement(proceso);
+                            }
                             break;
-                        case 2:
-                            modelListo.addElement(proceso);
+                        case 2://Listo
+                            modelInicio.removeElement(proceso);
+                            if (!modelListo.contains(proceso)) {
+                                modelListo.addElement(proceso);
+                            }
                             break;
-                        case 3:
-                            modelEnEjecucion.addElement(proceso);
+                        case 3://Ejecucion
+                            modelEnEspera.removeElement(proceso);
+                            modelListo.removeElement(proceso);
+                            if (!modelEnEjecucion.contains(proceso)) {
+                                modelEnEjecucion.addElement(proceso);
+                            }
                             break;
-                        case 4:
-                            modelEnEspera.addElement(proceso);
+                        case 4://Espera
+                            modelEnEjecucion.removeElement(proceso);
+                            if (!modelEnEspera.contains(proceso)) {
+                                modelEnEspera.addElement(proceso);
+                            }
                             break;
-                        case 5:
-                            modelTerminado.addElement(proceso);
+                        case 5://Terminado
+                            modelEnEjecucion.removeElement(proceso);
+                            if (!modelTerminado.contains(proceso)) {
+                                modelTerminado.addElement(proceso);
+                            }
                             break;
                     }
                 }
-                sleep(1000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(SWorkerRefrescarVista.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

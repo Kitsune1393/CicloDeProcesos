@@ -1,6 +1,7 @@
 package vista;
 
-import controlador.ActualizarTiempoEstados;
+import controlador.SWorkerEstadosProcesos;
+import controlador.SWorkerCrearProceso;
 import controlador.SWorkerRefrescarVista;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,10 +39,6 @@ public class JFramePrincipal extends javax.swing.JFrame {
         ));
     }
 
-    public List<Proceso> getProcesos() {
-        return procesos;
-    }
-
     public JList<String> getjListEnEjecucion() {
         return jListEnEjecucion;
     }
@@ -62,19 +59,20 @@ public class JFramePrincipal extends javax.swing.JFrame {
         return jListTerminado;
     }
 
-    private double random(double inicio, double fin) {
-        return (Math.random() * (fin - inicio)) + inicio;
+    public int getCont() {
+        return cont;
     }
 
-    private void crearProceso() {
-        cont++;
-        procesos.add(new Proceso(
-                "P" + cont,
-                random(ordenador.getMemoria() * 0.1, ordenador.getMemoria()),
-                random(ordenador.getDiscoDuro() * 0.1, ordenador.getDiscoDuro()),
-                random(ordenador.getNucleos() * 0.1, ordenador.getNucleos()),
-                random(2, 5)
-        ));
+    public void setCont(int cont) {
+        this.cont = cont;
+    }
+
+    public Ordenador getOrdenador() {
+        return ordenador;
+    }
+
+    public List<Proceso> getProcesos() {
+        return procesos;
     }
 
     @SuppressWarnings("unchecked")
@@ -121,7 +119,7 @@ public class JFramePrincipal extends javax.swing.JFrame {
         setResizable(false);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Listo"));
-        jPanel1.setPreferredSize(new java.awt.Dimension(270, 238));
+        jPanel1.setPreferredSize(new java.awt.Dimension(280, 238));
 
         jListListo.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jListListo.setEnabled(false);
@@ -133,7 +131,7 @@ public class JFramePrincipal extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -144,7 +142,7 @@ public class JFramePrincipal extends javax.swing.JFrame {
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("En ejecución"));
-        jPanel2.setPreferredSize(new java.awt.Dimension(270, 238));
+        jPanel2.setPreferredSize(new java.awt.Dimension(280, 238));
 
         jListEnEjecucion.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jListEnEjecucion.setEnabled(false);
@@ -156,7 +154,7 @@ public class JFramePrincipal extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -167,7 +165,7 @@ public class JFramePrincipal extends javax.swing.JFrame {
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Terminado"));
-        jPanel3.setPreferredSize(new java.awt.Dimension(270, 238));
+        jPanel3.setPreferredSize(new java.awt.Dimension(280, 238));
 
         jListTerminado.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jListTerminado.setEnabled(false);
@@ -179,7 +177,7 @@ public class JFramePrincipal extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -190,7 +188,7 @@ public class JFramePrincipal extends javax.swing.JFrame {
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("En espera"));
-        jPanel4.setPreferredSize(new java.awt.Dimension(270, 238));
+        jPanel4.setPreferredSize(new java.awt.Dimension(280, 238));
 
         jListEnEspera.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jListEnEspera.setEnabled(false);
@@ -202,7 +200,7 @@ public class JFramePrincipal extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -214,6 +212,7 @@ public class JFramePrincipal extends javax.swing.JFrame {
 
         jButtonCrearProceso.setText("Crear proceso");
         jButtonCrearProceso.setEnabled(false);
+        jButtonCrearProceso.setFocusable(false);
         jButtonCrearProceso.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCrearProcesoActionPerformed(evt);
@@ -221,7 +220,7 @@ public class JFramePrincipal extends javax.swing.JFrame {
         });
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Inicio"));
-        jPanel5.setPreferredSize(new java.awt.Dimension(270, 238));
+        jPanel5.setPreferredSize(new java.awt.Dimension(280, 238));
 
         jListInicio.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jListInicio.setEnabled(false);
@@ -233,7 +232,7 @@ public class JFramePrincipal extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
@@ -306,6 +305,7 @@ public class JFramePrincipal extends javax.swing.JFrame {
         );
 
         jButtonIniciar.setText("Iniciar");
+        jButtonIniciar.setFocusable(false);
         jButtonIniciar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonIniciarActionPerformed(evt);
@@ -441,12 +441,12 @@ public class JFramePrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonCrearProcesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCrearProcesoActionPerformed
-        crearProceso();
+        new SWorkerCrearProceso(this).execute();
     }//GEN-LAST:event_jButtonCrearProcesoActionPerformed
 
     private void jButtonIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIniciarActionPerformed
-        new SWorkerRefrescarVista(this).execute();;
-        new ActualizarTiempoEstados(procesos).start();
+        new SWorkerRefrescarVista(this).execute();
+        new SWorkerEstadosProcesos(this).execute();
         jButtonIniciar.setEnabled(false);
         jButtonCrearProceso.setEnabled(true);
     }//GEN-LAST:event_jButtonIniciarActionPerformed
