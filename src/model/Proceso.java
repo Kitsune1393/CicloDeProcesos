@@ -1,5 +1,7 @@
 package model;
 
+import java.text.DecimalFormat;
+
 /**
  *
  * @author william
@@ -10,17 +12,13 @@ public class Proceso {
     private double memoria;
     private double discoDuro;
     private double nucleos;
-    private long tiempo;
+    private double tiempo;
     /**
-     * 1- Inicio
-     * 2- Listo
-     * 3- Ejecución
-     * 4- Espera
-     * 5- Terminado
+     * 1- Inicio 2- Listo 3- Ejecución 4- Espera 5- Terminado
      */
     private int estado;
 
-    public Proceso(String nombre, double memoria, double discoDuro, double nucleos, long tiempo) {
+    public Proceso(String nombre, double memoria, double discoDuro, double nucleos, double tiempo) {
         this.nombre = nombre;
         this.memoria = memoria;
         this.discoDuro = discoDuro;
@@ -69,17 +67,22 @@ public class Proceso {
         this.nucleos = nucleos;
     }
 
-    public long getTiempo() {
+    public double getTiempo() {
         return tiempo;
     }
 
-    public void setTiempo(long tiempo) {
+    public void setTiempo(double tiempo) {
         this.tiempo = tiempo;
     }
 
     @Override
     public String toString() {
-        return nombre + "-" + tiempo + "-" + memoria + "-" + discoDuro + "-" + nucleos;
+        DecimalFormat df = new DecimalFormat("###");
+        return nombre + " - "
+                + df.format(tiempo) + " s - "
+                + df.format(memoria) + " M.Gb - "
+                + df.format(discoDuro) + " DD.Gb - "
+                + df.format(nucleos)+" N";
     }
 
 }
