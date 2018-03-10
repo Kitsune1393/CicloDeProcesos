@@ -14,6 +14,7 @@ public class SWorkerRefrescarVista extends SwingWorker<Void, Void> {
     private final DefaultListModel modelListo;
     private final DefaultListModel modelTerminado;
     private final List<Proceso> procesos;
+    private final JFramePrincipal jFramePrincipal;
 
     public SWorkerRefrescarVista(JFramePrincipal jFramePrincipal) {
         modelInicio = new DefaultListModel();
@@ -27,14 +28,16 @@ public class SWorkerRefrescarVista extends SwingWorker<Void, Void> {
         modelTerminado = new DefaultListModel();
         jFramePrincipal.getjListTerminado().setModel(modelTerminado);
         procesos = jFramePrincipal.getProcesos();
+        this.jFramePrincipal = jFramePrincipal;
     }
 
     @Override
     protected Void doInBackground() {
         long time = System.currentTimeMillis();
         while (true) {
-            if (System.currentTimeMillis() - time > 1000) {
+            if (System.currentTimeMillis() - time > 100) {
                 time = System.currentTimeMillis();
+                jFramePrincipal.actualizarConsumoOrdenador();
                 for (Proceso proceso : procesos) {
                     switch (proceso.getEstado()) {
                         case 1://Inicio
@@ -44,12 +47,12 @@ public class SWorkerRefrescarVista extends SwingWorker<Void, Void> {
                             break;
                         case 2://Listo
                             modelInicio.removeElement(proceso);
+                            modelEnEspera.removeElement(proceso);
                             if (!modelListo.contains(proceso)) {
                                 modelListo.addElement(proceso);
                             }
                             break;
                         case 3://Ejecucion
-                            modelEnEspera.removeElement(proceso);
                             modelListo.removeElement(proceso);
                             if (!modelEnEjecucion.contains(proceso)) {
                                 modelEnEjecucion.addElement(proceso);

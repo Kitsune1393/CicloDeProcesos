@@ -13,6 +13,8 @@ public class Proceso {
     private double discoDuro;
     private double nucleos;
     private double tiempo;
+    private boolean visitado;
+    private boolean enEjecucion;
     /**
      * 1- Inicio 2- Listo 3- Ejecución 4- Espera 5- Terminado
      */
@@ -25,6 +27,24 @@ public class Proceso {
         this.nucleos = nucleos;
         this.tiempo = tiempo;
         this.estado = 1;
+        this.visitado=false;
+        this.enEjecucion=false;
+    }
+
+    public boolean isEnEjecucion() {
+        return enEjecucion;
+    }
+
+    public void setEnEjecucion(boolean enEjecucion) {
+        this.enEjecucion = enEjecucion;
+    }
+
+    public boolean isVisitado() {
+        return visitado;
+    }
+
+    public void setVisitado(boolean visitado) {
+        this.visitado = visitado;
     }
 
     public int getEstado() {

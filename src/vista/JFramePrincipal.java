@@ -3,6 +3,7 @@ package vista;
 import controlador.SWorkerEstadosProcesos;
 import controlador.SWorkerCrearProceso;
 import controlador.SWorkerRefrescarVista;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -30,15 +31,23 @@ public class JFramePrincipal extends javax.swing.JFrame {
                 Double.parseDouble(jTextFieldDiscoDuro.getText()),
                 Double.parseDouble(jTextFieldNucleos.getText())
         );
-        procesos.add(new Proceso(
+        Proceso procesoInit = new Proceso(
                 "P_init",
                 1,
                 50,
                 1,
                 Double.POSITIVE_INFINITY
-        ));
+        );
+        procesos.add(procesoInit);
     }
 
+    public void actualizarConsumoOrdenador(){
+        DecimalFormat df = new DecimalFormat("###");
+        jTextFieldMemoriaEnUso.setText(df.format(ordenador.getMemoriaEnUso()));
+        jTextFieldDiscoDuroEnUso.setText(df.format((ordenador.getDiscoDuroEnUso())));
+        jTextFieldNucleosEnUso.setText(df.format(ordenador.getNucleosEnUso()));
+    }
+    
     public JList<String> getjListEnEjecucion() {
         return jListEnEjecucion;
     }
