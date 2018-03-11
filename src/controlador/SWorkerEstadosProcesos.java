@@ -10,17 +10,19 @@ public class SWorkerEstadosProcesos extends SwingWorker<Void, Void> {
 
     private final List<Proceso> procesos;
     private final Ordenador ordenador;
+    private final JFramePrincipal jFramePrincipal;
 
     public SWorkerEstadosProcesos(JFramePrincipal jFramePrincipal) {
         this.procesos = jFramePrincipal.getProcesos();
         this.ordenador = jFramePrincipal.getOrdenador();
+        this.jFramePrincipal = jFramePrincipal;
     }
 
     @Override
     protected Void doInBackground() {
         long time = System.currentTimeMillis();
         while (true) {
-            if (System.currentTimeMillis() - time > 1000) {
+            if (System.currentTimeMillis() - time > jFramePrincipal.getVelocidad()) {
                 time = System.currentTimeMillis();
                 for (Proceso proceso : procesos) {
                     if (proceso.isVisitado()) {
@@ -34,8 +36,6 @@ public class SWorkerEstadosProcesos extends SwingWorker<Void, Void> {
                                 proceso.setVisitado(false);
                                 break;
                             case 3:
-                                //Proceso en ejecucion
-                                //Utilización de recursos
                                 if (!proceso.isEnEjecucion()) {
                                     if (ordenador.isExistResources(proceso)) {
                                         ordenador.addProcess(proceso);
@@ -44,11 +44,11 @@ public class SWorkerEstadosProcesos extends SwingWorker<Void, Void> {
                                         proceso.setEstado(4);
                                         proceso.setVisitado(false);
                                     }
+                                } else {
+                                    proceso.setTiempo(proceso.getTiempo() - 1);
                                 }
-                                proceso.setTiempo(proceso.getTiempo() - 1);
                                 if (proceso.getTiempo() <= 0) {
                                     proceso.setEstado(5);
-                                    //Liberar los recursos
                                     ordenador.finishProcess(proceso);
                                 }
                                 break;

@@ -35,7 +35,13 @@ public class SWorkerRefrescarVista extends SwingWorker<Void, Void> {
     protected Void doInBackground() {
         long time = System.currentTimeMillis();
         while (true) {
-            if (System.currentTimeMillis() - time > 100) {
+            if (System.currentTimeMillis() - time > 50) {
+                if (!jFramePrincipal.getjButtonCrearProceso().isEnabled()) {
+                    if (procesos.get(0).isEnEjecucion()) {
+                        jFramePrincipal.getjButtonCrearProceso().setEnabled(true);
+                        jFramePrincipal.getjSliderVelocidad().setEnabled(true);
+                    }
+                }
                 time = System.currentTimeMillis();
                 jFramePrincipal.actualizarConsumoOrdenador();
                 for (Proceso proceso : procesos) {
@@ -56,6 +62,11 @@ public class SWorkerRefrescarVista extends SwingWorker<Void, Void> {
                             modelListo.removeElement(proceso);
                             if (!modelEnEjecucion.contains(proceso)) {
                                 modelEnEjecucion.addElement(proceso);
+                                if (proceso.isEnEjecucion()) {
+                                    jFramePrincipal.getjListEnEjecucion().setSelectedIndex(
+                                            modelEnEjecucion.size()
+                                    );
+                                }
                             }
                             break;
                         case 4://Espera
@@ -72,6 +83,7 @@ public class SWorkerRefrescarVista extends SwingWorker<Void, Void> {
                             break;
                     }
                 }
+                jFramePrincipal.getjListEnEjecucion().updateUI();
             }
         }
     }

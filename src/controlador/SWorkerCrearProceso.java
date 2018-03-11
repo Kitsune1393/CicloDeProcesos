@@ -23,10 +23,10 @@ public class SWorkerCrearProceso extends SwingWorker<Void, Void> {
         Ordenador ordenador = jFramePrincipal.getOrdenador();
         jFramePrincipal.getProcesos().add(new Proceso(
                 "P" + jFramePrincipal.getCont(),
-                random(ordenador.getMemoria() * 0.1, ordenador.getMemoria()),
-                random(ordenador.getDiscoDuro() * 0.1, ordenador.getDiscoDuro()),
+                random(ordenador.getMemoria() * 0.1, ordenador.getMemoria()-1),
+                random(ordenador.getDiscoDuro() * 0.1, ordenador.getDiscoDuro()-1),
                 random(ordenador.getNucleos() * 0.1, ordenador.getNucleos()-1),
-                random(2, 5)
+                random(2, 8)
         ));
         return null;
     }

@@ -27,8 +27,8 @@ public class Proceso {
         this.nucleos = nucleos;
         this.tiempo = tiempo;
         this.estado = 1;
-        this.visitado=false;
-        this.enEjecucion=false;
+        this.visitado = false;
+        this.enEjecucion = false;
     }
 
     public boolean isEnEjecucion() {
@@ -98,11 +98,24 @@ public class Proceso {
     @Override
     public String toString() {
         DecimalFormat df = new DecimalFormat("###");
+        if (isEnEjecucion() && estado!=5) {
+            return ">> " + nombre + " - "
+                    + df.format(tiempo) + " s - "
+                    + df.format(memoria) + " Gb.M - "
+                    + df.format(discoDuro) + " Gb.DD - "
+                    + df.format(nucleos) + " N";
+        }
+        if (estado==5) {
+            return nombre + " - "
+                    + df.format(memoria) + " Gb.M - "
+                    + df.format(discoDuro) + " Gb.DD - "
+                    + df.format(nucleos) + " N";
+        }
         return nombre + " - "
                 + df.format(tiempo) + " s - "
                 + df.format(memoria) + " Gb.M - "
                 + df.format(discoDuro) + " Gb.DD - "
-                + df.format(nucleos)+" N";
+                + df.format(nucleos) + " N";
     }
 
 }

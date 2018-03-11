@@ -56,9 +56,9 @@ public class Ordenador {
     }
 
     public boolean isExistResources(Proceso proceso) {
-        return memoria - memoriaEnUso > proceso.getMemoria()
-                && discoDuro - discoDuroEnUso > proceso.getDiscoDuro()
-                && nucleos - nucleosEnUso > proceso.getNucleos();
+        return memoria - memoriaEnUso >= proceso.getMemoria()
+                && discoDuro - discoDuroEnUso >= proceso.getDiscoDuro()
+                && nucleos - nucleosEnUso >= proceso.getNucleos();
     }
 
     public void addProcess(Proceso proceso) {
